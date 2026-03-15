@@ -1,14 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.sgbd_proiect_bun_muzica.controller.MainController"
+      stylesheets="@style.css">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
 
-</AnchorPane>
+    <Label text="Music Manager" styleClass="title-label"/>
+
+    <!-- Tabel Parinte: Artisti -->
+    <Label text="Artisti" styleClass="section-label"/>
+
+    <!-- Camp de cautare/filtrare artisti in timp real -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Cauta artist:"/>
+        <TextField fx:id="searchField" promptText="Scrie numele artistului..."
+                   prefWidth="250"/>
+        <Button text="Reseteaza" onAction="#onResetSearch"/>
+    </HBox>
+
+    <TableView fx:id="artistTable" prefHeight="200">
+        <columns>
+            <TableColumn fx:id="artistIdCol"      text="ID"          prefWidth="50"/>
+            <TableColumn fx:id="artistNameCol"    text="Nume"        prefWidth="200"/>
+            <TableColumn fx:id="artistCountryCol" text="Tara"        prefWidth="150"/>
+            <TableColumn fx:id="artistYearCol"    text="An Fondare"  prefWidth="100"/>
+        </columns>
+    </TableView>
+
+    <Separator/>
+
+    <!-- Tabel Copil: Albume -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Albume pentru: " styleClass="section-label"/>
+        <Label fx:id="selectedArtistLabel" styleClass="selected-label"/>
+    </HBox>
+
+    <TableView fx:id="albumTable" prefHeight="200">
+        <columns>
+            <TableColumn fx:id="albumIdCol"    text="ID"          prefWidth="50"/>
+            <TableColumn fx:id="albumTitleCol" text="Titlu"       prefWidth="250"/>
+            <TableColumn fx:id="albumYearCol"  text="An Lansare"  prefWidth="100"/>
+        </columns>
+    </TableView>
+
+    <!-- Butoane CRUD -->
+    <HBox spacing="10">
+        <Button text="Adauga Album"   onAction="#onAddAlbum"    styleClass="btn-add"/>
+        <Button text="Editeaza Album" onAction="#onEditAlbum"   styleClass="btn-edit"/>
+        <Button text="Sterge Album"   onAction="#onDeleteAlbum" styleClass="btn-delete"/>
+        <Button text="Refresh"        onAction="#onRefresh"     styleClass="btn-refresh"/>
+    </HBox>
+
+</VBox>

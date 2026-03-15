@@ -27,7 +27,7 @@ tasks.withType<JavaCompile> {
 
 application {
     mainModule.set("org.example.sgbd_proiect_bun_muzica")
-    mainClass.set("org.example.sgbd_proiect_bun_muzica.HelloApplication")
+    mainClass.set("org.example.sgbd_proiect_bun_muzica.Launcher")
 }
 
 javafx {
@@ -38,6 +38,7 @@ javafx {
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    implementation("org.postgresql:postgresql:42.7.8")
 }
 
 tasks.withType<Test> {

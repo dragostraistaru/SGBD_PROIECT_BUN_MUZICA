@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
+<VBox spacing="12" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.sgbd_proiect_bun_muzica.controller.AlbumDialogController"
+      stylesheets="@style.css">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
 
-</AnchorPane>
+    <Label fx:id="dialogTitleLabel" text="Album" styleClass="section-label"/>
+
+    <GridPane hgap="10" vgap="8">
+        <Label text="Titlu:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="titleField" promptText="Titlu album"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="220"/>
+
+        <Label text="An Lansare:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="yearField" promptText="ex: 2020"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Salveaza" onAction="#onSave"   styleClass="btn-add"/>
+        <Button text="Anuleaza" onAction="#onCancel"/>
+    </HBox>
+
+</VBox>

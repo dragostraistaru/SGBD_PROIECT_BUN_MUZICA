@@ -1,0 +1,50 @@
+.title-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.section-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495e;
+}
+
+.selected-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2980b9;
+    -fx-font-weight: bold;
+}
+
+.error-label {
+    -fx-text-fill: #e74c3c;
+    -fx-font-size: 12px;
+}
+
+.btn-add {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.btn-add:hover { -fx-background-color: #219a52; }
+
+.btn-edit {
+    -fx-background-color: #2980b9;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.btn-edit:hover { -fx-background-color: #2471a3; }
+
+.btn-delete {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.btn-delete:hover { -fx-background-color: #cb4335; }
+
+.btn-refresh {
+    -fx-background-color: #7f8c8d;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.btn-refresh:hover { -fx-background-color: #707b7c; }
