@@ -35,7 +35,6 @@ public class MainController {
     @FXML private TableColumn<Artist, String>  artistCountryCol;
     @FXML private TableColumn<Artist, Integer> artistYearCol;
 
-    // Tabel copil - Albume
     @FXML private TableView<Album>             albumTable;
     @FXML private TableColumn<Album, Long>     albumIdCol;
     @FXML private TableColumn<Album, String>   albumTitleCol;
@@ -46,7 +45,6 @@ public class MainController {
 
     private MusicService musicService;
 
-    // Lista completa de artisti - sursa pentru FilteredList
     private final ObservableList<Artist> allArtists = FXCollections.observableArrayList();
 
     public void setMusicService(MusicService musicService) {
@@ -63,7 +61,6 @@ public class MainController {
     private void initSearch() {
         FilteredList<Artist> filteredArtists = new FilteredList<>(allArtists, a -> true);
 
-        // La fiecare tasta apasata, actualizeaza filtrul
         searchField.textProperty().addListener((obs, oldVal, newVal) -> {
             filteredArtists.setPredicate(artist -> {
                 if (newVal == null || newVal.trim().isEmpty()) return true;
@@ -75,7 +72,6 @@ public class MainController {
     }
 
     private void initTables() {
-        // Coloane artisti
         artistIdCol.setCellValueFactory(d ->
                 new SimpleLongProperty(d.getValue().getId()).asObject());
         artistNameCol.setCellValueFactory(d ->
@@ -85,7 +81,6 @@ public class MainController {
         artistYearCol.setCellValueFactory(d ->
                 new SimpleIntegerProperty(d.getValue().getFormedYear()).asObject());
 
-        // Coloane albume
         albumIdCol.setCellValueFactory(d ->
                 new SimpleLongProperty(d.getValue().getId()).asObject());
         albumTitleCol.setCellValueFactory(d ->
@@ -93,7 +88,6 @@ public class MainController {
         albumYearCol.setCellValueFactory(d ->
                 new SimpleIntegerProperty(d.getValue().getReleaseYear()).asObject());
 
-        // Listener selectie artist -> incarca albumele automat
         artistTable.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, newVal) -> {
                     if (newVal != null) {
