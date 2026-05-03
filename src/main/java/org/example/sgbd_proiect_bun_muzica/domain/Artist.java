@@ -1,12 +1,24 @@
 package org.example.sgbd_proiect_bun_muzica.domain;
 
-/**
- * Entitatea Artist - parintele in relatia 1-N cu Album.
- */
-public class Artist extends Entity<Long> {
+import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "artists")
+public class Artist extends BaseEntity<Long> {
+
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
+
+    @Column(name = "country", length = 100)
     private String country;
+
+    @Column(name = "formed_year")
     private int formedYear;
+
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Album> albums = new ArrayList<>();
 
     public Artist(Long id, String name, String country, int formedYear) {
         super(id);
@@ -25,6 +37,9 @@ public class Artist extends Entity<Long> {
 
     public int getFormedYear() { return formedYear; }
     public void setFormedYear(int formedYear) { this.formedYear = formedYear; }
+
+    public List<Album> getAlbums() { return albums; }
+    public void setAlbums(List<Album> albums) { this.albums = albums; }
 
     @Override
     public String toString() { return name; }

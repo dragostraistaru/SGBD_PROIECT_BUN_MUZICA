@@ -41,13 +41,19 @@ public class MusicService {
     /** Adauga album nou cu validare */
     public void addAlbum(String title, int releaseYear, Long artistId) {
         validateAlbum(title, releaseYear);
-        albumRepository.add(new Album(null, title, releaseYear, artistId));
+        Artist artist = artistRepository.findById(artistId)
+                .orElseThrow(() -> new RepositoryException("Artistul nu a fost gasit!"));
+        albumRepository.add(new Album(title, releaseYear, artist));
     }
 
     /** Actualizeaza album cu validare */
     public void updateAlbum(Long id, String title, int releaseYear, Long artistId) {
         validateAlbum(title, releaseYear);
-        albumRepository.update(new Album(id, title, releaseYear, artistId));
+        Artist artist = artistRepository.findById(artistId)
+                .orElseThrow(() -> new RepositoryException("Artistul nu a fost gasit!"));
+        Album album = new Album(title, releaseYear, artist);
+        album.setId(id);
+        albumRepository.update(album);
     }
 
     /** Sterge album */

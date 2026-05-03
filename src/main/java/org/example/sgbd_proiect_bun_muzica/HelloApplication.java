@@ -5,8 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.sgbd_proiect_bun_muzica.controller.MainController;
-import org.example.sgbd_proiect_bun_muzica.repository.AlbumRepositoryDB;
-import org.example.sgbd_proiect_bun_muzica.repository.ArtistRepositoryDB;
+import org.example.sgbd_proiect_bun_muzica.repository.AlbumRepositoryORM;
+import org.example.sgbd_proiect_bun_muzica.repository.ArtistRepositoryORM;
 import org.example.sgbd_proiect_bun_muzica.service.MusicService;
 
 /**
@@ -17,8 +17,8 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        ArtistRepositoryDB artistRepo = new ArtistRepositoryDB();
-        AlbumRepositoryDB  albumRepo  = new AlbumRepositoryDB();
+        ArtistRepositoryORM artistRepo = new ArtistRepositoryORM();
+        AlbumRepositoryORM albumRepo = new AlbumRepositoryORM();
         MusicService musicService = new MusicService(artistRepo, albumRepo);
 
         FXMLLoader loader = new FXMLLoader(

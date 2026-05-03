@@ -1,9 +1,7 @@
 plugins {
     java
     application
-    id("org.javamodularity.moduleplugin") version "1.8.15"
     id("org.openjfx.javafxplugin") version "0.0.13"
-    id("org.beryx.jlink") version "2.25.0"
 }
 
 group = "org.example"
@@ -26,7 +24,6 @@ tasks.withType<JavaCompile> {
 }
 
 application {
-    mainModule.set("org.example.sgbd_proiect_bun_muzica")
     mainClass.set("org.example.sgbd_proiect_bun_muzica.Launcher")
 }
 
@@ -38,17 +35,23 @@ javafx {
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+    // PostgreSQL driver
     implementation("org.postgresql:postgresql:42.7.8")
+
+    // Hibernate ORM + JPA
+    implementation("org.hibernate.orm:hibernate-core:6.4.4.Final")
+    implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
+
+    // HikariCP - Connection Pooling
+    implementation("com.zaxxer:HikariCP:5.1.0")
+
+    // Logging
+    implementation("org.slf4j:slf4j-simple:2.0.12")
+
+    implementation("org.hibernate.orm:hibernate-hikaricp:6.4.4.Final")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
-}
-
-jlink {
-    imageZip.set(layout.buildDirectory.file("/distributions/app-${javafx.platform.classifier}.zip"))
-    options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
-    launcher {
-        name = "app"
-    }
 }
