@@ -43,4 +43,10 @@ public class Artist extends BaseEntity<Long> {
 
     @Override
     public String toString() { return name; }
+
+
+    public void addAlbum(Album album) {
+        albums.add(album);
+        album.setArtist(this);
+    }
 }

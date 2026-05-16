@@ -12,6 +12,9 @@ public class Album extends BaseEntity<Long> {
     @Column(name = "release_year", nullable = false)
     private int releaseYear;
 
+    @Column(name = "label", nullable = false, length = 100)
+    private String label = "Unknown";
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artist_id")
     private Artist artist;
@@ -35,6 +38,8 @@ public class Album extends BaseEntity<Long> {
     public void setTitle(String title) { this.title = title; }
     public int getReleaseYear() { return releaseYear; }
     public void setReleaseYear(int releaseYear) { this.releaseYear = releaseYear; }
+    public String getLabel() { return label; }
+    public void setLabel(String label) { this.label = label; }
     public Artist getArtist() { return artist; }
     public void setArtist(Artist artist) { this.artist = artist; }
 

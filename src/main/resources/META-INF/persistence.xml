@@ -10,7 +10,7 @@
         <properties>
             <!-- Conexiune DB -->
             <property name="jakarta.persistence.jdbc.url"
-                      value="jdbc:postgresql://localhost:5432/musicdb"/>
+                      value="jdbc:postgresql://localhost:5432/musicdb?prepareThreshold=1&amp;preparedStatementCacheQueries=256&amp;preparedStatementCacheSizeMiB=5"/>
             <property name="jakarta.persistence.jdbc.user"
                       value="postgres"/>
             <property name="jakarta.persistence.jdbc.password"
@@ -32,9 +32,13 @@
             <property name="hibernate.hikari.connectionTestQuery"  value="SELECT 1"/>
 
             <!-- Hibernate settings -->
-            <property name="hibernate.show_sql"     value="true"/>
+<!--            <property name="hibernate.show_sql"     value="true"/>-->
+            <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql"   value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <property name="hibernate.highlight_sql" value="true"/>
+<!--            <property name="hibernate.generate_statistics" value="true"/>-->
         </properties>
 
     </persistence-unit>

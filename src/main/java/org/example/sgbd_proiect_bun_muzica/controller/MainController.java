@@ -27,6 +27,11 @@ import java.util.List;
  * Include functionalitate de cautare/filtrare in timp real.
  */
 public class MainController {
+    // IMPORTANT: daca `MusicService` este configurat cu un cache pentru entitatile "Artist",
+    // apelurile catre `musicService.getAllArtists()` sau `musicService.findArtistById()` pot
+    // returna date din cache (hit) sau din baza de date (miss). Daca modificati manual datele
+    // sau efectuati update-uri in demo-uri, apelati `onRefresh()` sau folositi metodele de
+    // invalidare din `MusicService` pentru a forta reîncărcarea din DB.
 
     // Tabel parinte - Artisti
     @FXML private TableView<Artist>            artistTable;

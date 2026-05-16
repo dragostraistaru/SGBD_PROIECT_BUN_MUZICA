@@ -5,6 +5,8 @@ import jakarta.persistence.EntityTransaction;
 import org.example.sgbd_proiect_bun_muzica.domain.Artist;
 import org.example.sgbd_proiect_bun_muzica.exceptions.RepositoryException;
 import org.example.sgbd_proiect_bun_muzica.util.JPAUtil;
+import org.example.sgbd_proiect_bun_muzica.util.paging.Page;
+import org.example.sgbd_proiect_bun_muzica.util.paging.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -102,6 +104,66 @@ public class ArtistRepositoryORM implements IArtistRepository {
             return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
         } catch (Exception e) {
             throw new RepositoryException("Eroare la findByName", e);
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * STRATEGIE A: Paginare cu OFFSET/LIMIT
+     * Simplu și direct, dar mai lent pe pagini mari
+     */
+    public Page<Artist> findAllOffset(Pageable pageable) {
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            long total = em.createQuery("SELECT COUNT(a) FROM Artist a", Long.class)
+                    .getSingleResult();
+
+            List<Artist> content = em.createQuery("SELECT a FROM Artist a ORDER BY a.id", Artist.class)
+                    .setFirstResult(pageable.getOffset())
+                    .setMaxResults(pageable.getPageSize())
+                    .getResultList();
+
+            return new Page<>(content, pageable.getPageNumber(), pageable.getPageSize(), total);
+        } catch (Exception e) {
+            throw new RepositoryException("Eroare la findAllOffset", e);
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * STRATEGIE B: Paginare cu Cursor (Keyset)
+     * Mai rapid pentru pagini mari - uses indexed column
+     * lastId = ID-ul ultimului element din pagina anterioara
+     */
+    public Page<Artist> findAllCursor(Pageable pageable, Long lastId) {
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            // Count total
+            long total = em.createQuery("SELECT COUNT(a) FROM Artist a", Long.class)
+                    .getSingleResult();
+
+            // Fetch page - only fetch what's needed
+            List<Artist> content;
+            if (lastId == null) {
+                // First page
+                content = em.createQuery("SELECT a FROM Artist a ORDER BY a.id", Artist.class)
+                        .setMaxResults(pageable.getPageSize())
+                        .getResultList();
+            } else {
+                // Next pages - efficient keyset pagination
+                content = em.createQuery(
+                        "SELECT a FROM Artist a WHERE a.id > :lastId ORDER BY a.id",
+                        Artist.class)
+                        .setParameter("lastId", lastId)
+                        .setMaxResults(pageable.getPageSize())
+                        .getResultList();
+            }
+
+            return new Page<>(content, pageable.getPageNumber(), pageable.getPageSize(), total);
+        } catch (Exception e) {
+            throw new RepositoryException("Eroare la findAllCursor", e);
         } finally {
             em.close();
         }

@@ -5,6 +5,7 @@ import org.example.sgbd_proiect_bun_muzica.domain.Artist;
 import org.example.sgbd_proiect_bun_muzica.exceptions.RepositoryException;
 import org.example.sgbd_proiect_bun_muzica.repository.IAlbumRepository;
 import org.example.sgbd_proiect_bun_muzica.repository.IArtistRepository;
+import org.example.sgbd_proiect_bun_muzica.util.cache.ArtistCache;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,19 +18,33 @@ public class MusicService {
 
     private final IArtistRepository artistRepository;
     private final IAlbumRepository  albumRepository;
+    private final ArtistCache artistCache;
 
     public MusicService(IArtistRepository artistRepository, IAlbumRepository albumRepository) {
-        this.artistRepository = artistRepository;
-        this.albumRepository  = albumRepository;
+        this(artistRepository, albumRepository, new ArtistCache());
     }
 
+    public MusicService(IArtistRepository artistRepository, IAlbumRepository albumRepository, ArtistCache artistCache) {
+        this.artistRepository = artistRepository;
+        this.albumRepository  = albumRepository;
+        this.artistCache = artistCache;
+    }
 
     public List<Artist> getAllArtists() {
-        return artistRepository.getAll();
+        return artistCache.getAllArtists(() -> artistRepository.getAll());
     }
 
     public Optional<Artist> findArtistById(Long id) {
-        return artistRepository.findById(id);
+        return artistCache.getArtistById(id, artistRepository::findById);
+    }
+
+    public void updateArtist(Artist artist) {
+        artistRepository.update(artist);
+        artistCache.invalidateArtist(artist.getId());
+    }
+
+    public String getArtistCacheStats() {
+        return artistCache.formatStatistics();
     }
 
 

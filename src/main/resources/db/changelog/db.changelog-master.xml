@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="001-create-artists" author="dado">
+        <createTable tableName="artists">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="country" type="VARCHAR(100)"/>
+
+            <column name="formed_year" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="002-create-albums" author="dado">
+
+        <createTable tableName="albums">
+
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="title" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="release_year" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="artist_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="albums"
+                baseColumnNames="artist_id"
+                constraintName="fk_artist"
+                referencedTableName="artists"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+    </changeSet>
+
+
+    <changeSet id="003-add-label-column" author="dado">
+
+        <addColumn tableName="albums">
+
+            <column name="label" type="VARCHAR(100)" defaultValue="Unknown">
+                <constraints nullable="false"/>
+            </column>
+
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="albums" columnName="label"/>
+        </rollback>
+
+    </changeSet>
+
+</databaseChangeLog>

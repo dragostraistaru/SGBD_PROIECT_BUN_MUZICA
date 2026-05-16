@@ -5,6 +5,8 @@ import org.example.sgbd_proiect_bun_muzica.domain.Album;
 import org.example.sgbd_proiect_bun_muzica.domain.Artist;
 import org.example.sgbd_proiect_bun_muzica.exceptions.RepositoryException;
 import org.example.sgbd_proiect_bun_muzica.util.JPAUtil;
+import org.example.sgbd_proiect_bun_muzica.util.paging.Page;
+import org.example.sgbd_proiect_bun_muzica.util.paging.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -105,6 +107,63 @@ public class AlbumRepositoryORM implements IAlbumRepository {
                     .getResultList();
         } catch (Exception e) {
             throw new RepositoryException("Eroare la findByArtistId", e);
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * STRATEGIE A: Paginare cu OFFSET/LIMIT
+     */
+    public Page<Album> findAllOffset(Pageable pageable) {
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            long total = em.createQuery("SELECT COUNT(a) FROM Album a", Long.class)
+                    .getSingleResult();
+
+            List<Album> content = em.createQuery(
+                    "SELECT a FROM Album a LEFT JOIN FETCH a.artist ORDER BY a.id", 
+                    Album.class)
+                    .setFirstResult(pageable.getOffset())
+                    .setMaxResults(pageable.getPageSize())
+                    .getResultList();
+
+            return new Page<>(content, pageable.getPageNumber(), pageable.getPageSize(), total);
+        } catch (Exception e) {
+            throw new RepositoryException("Eroare la findAllOffset", e);
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * STRATEGIE B: Paginare cu Cursor (Keyset) - Mai rapid
+     */
+    public Page<Album> findAllCursor(Pageable pageable, Long lastId) {
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            long total = em.createQuery("SELECT COUNT(a) FROM Album a", Long.class)
+                    .getSingleResult();
+
+            List<Album> content;
+            if (lastId == null) {
+                content = em.createQuery(
+                        "SELECT a FROM Album a LEFT JOIN FETCH a.artist ORDER BY a.id", 
+                        Album.class)
+                        .setMaxResults(pageable.getPageSize())
+                        .getResultList();
+            } else {
+                content = em.createQuery(
+                        "SELECT a FROM Album a LEFT JOIN FETCH a.artist WHERE a.id > :lastId ORDER BY a.id",
+                        Album.class)
+                        .setParameter("lastId", lastId)
+                        .setMaxResults(pageable.getPageSize())
+                        .getResultList();
+            }
+
+            return new Page<>(content, pageable.getPageNumber(), pageable.getPageSize(), total);
+        } catch (Exception e) {
+            throw new RepositoryException("Eroare la findAllCursor", e);
         } finally {
             em.close();
         }

@@ -15,7 +15,7 @@ val junitVersion = "5.12.1"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(23)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -45,6 +45,12 @@ dependencies {
 
     // HikariCP - Connection Pooling
     implementation("com.zaxxer:HikariCP:5.1.0")
+
+    // Liquibase - database migrations
+    implementation("org.liquibase:liquibase-core:4.24.0")
+
+    // Caffeine Cache
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 
     // Logging
     implementation("org.slf4j:slf4j-simple:2.0.12")
